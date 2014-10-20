@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=
+	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="neo4jClientFactory" class="com.xinhuanet.commons.neo4j.Neo4jClientFactory">
+		<constructor-arg index="0" value="http://192.168.86.222:7474/" />
+		<constructor-arg index="1" value="neo4j" />
+		<constructor-arg index="2" value="xinhua" />
+</beans>
