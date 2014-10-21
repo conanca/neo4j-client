@@ -51,7 +51,7 @@ public class RestfulClient {
 	}
 
 	private WebTarget createWebTarget(List<String> paths) {
-		WebTarget target = client().target(url).path("resource");
+		WebTarget target = client().target(url);
 		for (String path : paths) {
 			target = target.path(path);
 		}

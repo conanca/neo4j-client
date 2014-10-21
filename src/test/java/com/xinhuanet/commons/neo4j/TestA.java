@@ -27,7 +27,7 @@ public class TestA {
 		Neo4jClient client = pool.borrowObject();
 		List<String> paths = new ArrayList<String>();
 		paths.add("node");
-		paths.add("0");
+		paths.add("1025");
 		String a = client.get(paths);
 		System.out.println(a);
 	}
