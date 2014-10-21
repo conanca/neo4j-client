@@ -11,6 +11,18 @@ public class Neo4jClientFactory extends BasePooledObjectFactory<Neo4jClient> {
 	private String httpAuthUserName;
 	private String httpAuthPassword;
 
+	public Neo4jClientFactory(String url) {
+		super();
+		this.url = url;
+	}
+
+	public Neo4jClientFactory(String url, String httpAuthUserName, String httpAuthPassword) {
+		super();
+		this.url = url;
+		this.httpAuthUserName = httpAuthUserName;
+		this.httpAuthPassword = httpAuthPassword;
+	}
+
 	@Override
 	public Neo4jClient create() throws Exception {
 		if (!StringUtils.isEmpty(url) && !StringUtils.isEmpty(httpAuthUserName)

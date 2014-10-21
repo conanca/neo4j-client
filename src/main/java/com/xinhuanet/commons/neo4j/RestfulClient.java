@@ -44,6 +44,12 @@ public class RestfulClient {
 		return response.toString();
 	}
 
+	public String get(List<String> paths) {
+		WebTarget target = createWebTarget(paths);
+		String response = target.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
+		return response;
+	}
+
 	private WebTarget createWebTarget(List<String> paths) {
 		WebTarget target = client().target(url).path("resource");
 		for (String path : paths) {

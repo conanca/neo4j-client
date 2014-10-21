@@ -1,5 +1,7 @@
 package com.xinhuanet.commons.neo4j;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.pool2.ObjectPool;
@@ -23,6 +25,10 @@ public class TestA {
 	public void test() throws NoSuchElementException, IllegalStateException, Exception {
 		ObjectPool<Neo4jClient> pool = new GenericObjectPool<Neo4jClient>(neo4jClientFactory);
 		Neo4jClient client = pool.borrowObject();
-		client.post();
+		List<String> paths = new ArrayList<String>();
+		paths.add("node");
+		paths.add("0");
+		String a = client.get(paths);
+		System.out.println(a);
 	}
 }
