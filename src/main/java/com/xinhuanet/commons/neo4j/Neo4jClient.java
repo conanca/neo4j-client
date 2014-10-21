@@ -10,23 +10,6 @@ public class Neo4jClient extends RestfulClient {
 		super(url, httpAuthUserName, httpAuthPassword);
 	}
 
-	// TODO
-	public void get() {
+	// TODO 节点和关系的增删改查方法，以及执行cypher的方法
 
-	}
-
-	// TODO
-	public void post() {
-
-	}
-
-	// TODO
-	public void delete() {
-
-	}
-
-	// TODO
-	public void put() {
-
-	}
 }

@@ -50,6 +50,16 @@ public class RestfulClient {
 		return response;
 	}
 
+	// TODO
+	public void delete() {
+
+	}
+
+	// TODO
+	public void put() {
+
+	}
+
 	private WebTarget createWebTarget(List<String> paths) {
 		WebTarget target = client().target(url);
 		for (String path : paths) {
