@@ -39,4 +39,5 @@ public class Neo4jClientPoolTest {
 		logger.debug("Content:" + response.readEntity(String.class));
 		neo4jClientPool.returnObject(client);
 	}
+
 }
