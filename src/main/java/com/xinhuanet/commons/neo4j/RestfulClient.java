@@ -13,6 +13,12 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
+/**
+ * 一个简单的Restful客户端类，http响应内容为JSON格式。
+ * 
+ * @author conanca
+ * 
+ */
 public class RestfulClient {
 
 	private Client client;
@@ -37,33 +43,50 @@ public class RestfulClient {
 		}
 	}
 
-	public String post(List<String> paths, Map<String, String> form) {
-		WebTarget target = createWebTarget(paths);
+	public Response post(List<String> resources, String para) {
+		WebTarget target = createWebTarget(resources);
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
-				Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
-		return response.toString();
-	}
-
-	public String get(List<String> paths) {
-		WebTarget target = createWebTarget(paths);
-		String response = target.request(MediaType.APPLICATION_JSON_TYPE).get(String.class);
+				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		return response;
 	}
 
-	// TODO
-	public void delete() {
-
+	public Response post(List<String> resources, Map<String, String> para) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
+				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		return response;
 	}
 
-	// TODO
-	public void put() {
-
+	public Response get(List<String> resources) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
+		return response;
 	}
 
-	private WebTarget createWebTarget(List<String> paths) {
+	public Response delete(List<String> resources) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
+		return response;
+	}
+
+	public Response put(List<String> resources, String para) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
+				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		return response;
+	}
+
+	public Response put(List<String> resources, Map<String, String> para) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
+				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		return response;
+	}
+
+	private WebTarget createWebTarget(List<String> resources) {
 		WebTarget target = client().target(url);
-		for (String path : paths) {
-			target = target.path(path);
+		for (String resource : resources) {
+			target = target.path(resource);
 		}
 		return target;
 	}
