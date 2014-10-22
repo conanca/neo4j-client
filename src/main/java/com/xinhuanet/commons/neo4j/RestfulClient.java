@@ -7,6 +7,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -39,8 +40,12 @@ public class RestfulClient {
 
 	public String post(List<String> paths, Map<String, String> form) {
 		WebTarget target = createWebTarget(paths);
+		Form paramForm = new Form();
+		for (String key : form.keySet()) {
+			paramForm.param(key, form.get(key));
+		}
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
-				Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+				Entity.entity(paramForm, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 		return response.toString();
 	}
 

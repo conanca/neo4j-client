@@ -29,4 +29,5 @@ public class TestA {
 		String a = client.get(paths);
 		System.out.println(a);
 	}
+
 }
