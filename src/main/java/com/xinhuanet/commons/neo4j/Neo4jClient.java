@@ -1,5 +1,12 @@
 package com.xinhuanet.commons.neo4j;
 
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.xinhuanet.entity.ResData;
+
+@Service("neo4jClient")
 public class Neo4jClient extends RestfulClient {
 
 	public Neo4jClient(String url) {
@@ -10,6 +17,21 @@ public class Neo4jClient extends RestfulClient {
 		super(url, httpAuthUserName, httpAuthPassword);
 	}
 
-	// TODO 节点和关系的增删改查方法，以及执行cypher的方法
+	public ResData createNode(Integer userId, Map<String, String> param) {
+		ResData resData = new ResData();
+		// Response response =
+		return resData;
+	}
+	// boolean createRelationship(Integer startUserId, Integer endUserId, String
+	// relType, Map<String, String> map);
+	//
+	// boolean updateNode(Integer userId, Integer oldTypecode, Integer
+	// newTypeCode, Map<String, String> map);
+	//
+	// boolean updateRelationship(Integer startUserId, Integer endUserId, String
+	// relType, Map<String, String> map);
+	//
+	// boolean deleteRelationship(Integer startUserId, Integer endUserId, String
+	// relType);
 
 }
