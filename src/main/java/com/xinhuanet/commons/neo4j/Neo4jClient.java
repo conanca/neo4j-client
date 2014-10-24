@@ -17,21 +17,41 @@ public class Neo4jClient extends RestfulClient {
 		super(url, httpAuthUserName, httpAuthPassword);
 	}
 
-	public ResData createNode(Integer userId, Map<String, String> param) {
-		ResData resData = new ResData();
-		// Response response =
-		return resData;
+	public Boolean createNode(Integer userId, Integer typeCode, Map<String, String> param) {
+
+		return true;
 	}
-	// boolean createRelationship(Integer startUserId, Integer endUserId, String
-	// relType, Map<String, String> map);
-	//
-	// boolean updateNode(Integer userId, Integer oldTypecode, Integer
-	// newTypeCode, Map<String, String> map);
-	//
-	// boolean updateRelationship(Integer startUserId, Integer endUserId, String
-	// relType, Map<String, String> map);
-	//
-	// boolean deleteRelationship(Integer startUserId, Integer endUserId, String
-	// relType);
+
+	public ResData getNode(Integer userid) {
+		return null;
+	}
+
+	public Boolean updateNode(Integer userId, Map<String, String> param) {
+		return true;
+	}
+
+	public Boolean changeNodeType(Integer userId, Integer oldTypeCode, Integer newTypeCode) {
+		return true;
+	}
+
+	public Boolean deleteNodeRelation(Integer userId) {
+		return true;
+	}
+
+	public Boolean deleteNode(Integer userId) {
+		return true;
+	}
+
+	public Boolean createRelation(Integer startUserId, Integer endUserId, String relType, Map<String, String> param) {
+		return true;
+	}
+
+	public Boolean updateRelation(Integer startUserId, Integer endUserId, String relType, Map<String, String> param) {
+		return true;
+	}
+
+	public Boolean deleteRelation(Integer startUserId, Integer endUserId, String relType) {
+		return true;
+	}
 
 }

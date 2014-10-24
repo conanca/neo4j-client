@@ -64,7 +64,7 @@ public class RestfulClientTest {
 	public void testPostString() throws Exception {
 		List<String> resources = new ArrayList<String>();
 		resources.add("node");
-		String from = "{}";
+		String from = "";
 		Response response = restfulClient.post(resources, from);
 		logger.debug("Status:" + response.getStatus());
 		logger.debug("Status:" + response.getStatus());
