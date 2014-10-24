@@ -95,6 +95,13 @@ public class RestfulClient {
 		return response;
 	}
 
+	public Response queryViaCypher(List<String> resources, String cypher) {
+		WebTarget target = createWebTarget(resources);
+		Response response = target.request(MediaType.APPLICATION_JSON).post(
+				Entity.entity(cypher, MediaType.APPLICATION_JSON));
+		return response;
+	}
+
 	private WebTarget createWebTarget(List<String> resources) {
 		WebTarget target = client().target(url);
 		for (String resource : resources) {

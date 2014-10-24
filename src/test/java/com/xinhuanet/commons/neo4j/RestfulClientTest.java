@@ -97,6 +97,18 @@ public class RestfulClientTest {
 	}
 
 	@Test
+	public void testQuerryViaCypher() {
+		List<String> resources = new ArrayList<String>();
+		resources.add("cypher");
+		String cypher = "{" + "\"query\" : \"MATCH (n:UserNode{userId:{userId}}) RETURN n\"," + "\"params\": {"
+				+ "\"userId\" : \"1024\"" + "}" + "}";
+		Response response = restfulClient.queryViaCypher(resources, cypher);
+		logger.debug("Status:" + response.getStatus());
+		logger.debug("data:" + response);
+		logger.debug("Content:" + response.readEntity(String.class));
+	}
+
+	@Test
 	public void testPutListOfStringMapOfStringString() {
 		fail("Not yet implemented");
 	}
