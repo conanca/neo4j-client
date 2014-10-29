@@ -50,7 +50,7 @@ public class RestfulClient {
 	public Response post(List<String> resources, String para) {
 		WebTarget target = createWebTarget(resources);
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
-				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+				Entity.entity(para, MediaType.APPLICATION_JSON));
 		return response;
 	}
 
@@ -80,7 +80,7 @@ public class RestfulClient {
 	public Response put(List<String> resources, String para) {
 		WebTarget target = createWebTarget(resources);
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
-				Entity.entity(para, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+				Entity.entity(para, MediaType.APPLICATION_JSON));
 		return response;
 	}
 

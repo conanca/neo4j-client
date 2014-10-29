@@ -28,6 +28,7 @@ public class Neo4jClientTest {
 	@Test
 	public void testCreateNode() {
 		Map<String, String> para = new HashMap<String, String>();
+		para.put("testname", "abc");
 		Long id = neo4jClient.createNode(para);
 		logger.debug("id:" + id);
 	}
@@ -39,7 +40,7 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testAddLabels() {
-		boolean a = neo4jClient.addLabels(9054158L, "UserNode");
+		boolean a = neo4jClient.addLabels(9054159L, "UserNode");
 		logger.debug("" + a);
 
 	}
