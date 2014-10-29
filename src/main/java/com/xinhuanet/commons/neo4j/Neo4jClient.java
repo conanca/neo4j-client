@@ -36,12 +36,17 @@ public class Neo4jClient extends RestfulClient {
 
 	}
 
-	public Boolean createNode(Map<String, String> para) {
+	public Long createNode(Map<String, String> para) {
 		Response resp = this.post(Lang.list("node"), para);
 		if (resp.getStatus() == 201) {
-			return true;
+			String respJson = resp.readEntity(String.class);
+			Map respMap = JSON.parseObject(respJson, Map.class);
+			Object selfObj = respMap.get("self");
+			String selfStr = selfObj.toString();
+			long selfNodeId = Long.parseLong(selfStr.substring(selfStr.indexOf("/")));
+			return selfNodeId;
 		} else {
-			return false;
+			return -1L;
 		}
 	}
 
