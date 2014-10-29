@@ -13,6 +13,8 @@ import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 一个简单的Restful客户端类，http响应内容为JSON格式。
@@ -21,6 +23,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
  * 
  */
 public class RestfulClient {
+	private static Logger logger = LoggerFactory.getLogger(RestfulClient.class);
 
 	private Client client;
 	private String url;
@@ -97,6 +100,7 @@ public class RestfulClient {
 		for (String resource : resources) {
 			target = target.path(resource);
 		}
+		logger.debug(target.getUri().getPath());
 		return target;
 	}
 

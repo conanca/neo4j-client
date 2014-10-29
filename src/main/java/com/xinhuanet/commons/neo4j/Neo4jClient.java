@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 
 @Service("neo4jClient")
 public class Neo4jClient extends RestfulClient {
+	private static Logger logger = LoggerFactory.getLogger(Neo4jClient.class);
 
 	public Neo4jClient(String url) {
 		super(url);
@@ -43,7 +46,7 @@ public class Neo4jClient extends RestfulClient {
 			Map respMap = JSON.parseObject(respJson, Map.class);
 			Object selfObj = respMap.get("self");
 			String selfStr = selfObj.toString();
-			long selfNodeId = Long.parseLong(selfStr.substring(selfStr.indexOf("/")));
+			long selfNodeId = Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
 			return selfNodeId;
 		} else {
 			return -1L;
@@ -66,10 +69,11 @@ public class Neo4jClient extends RestfulClient {
 	}
 
 	public Boolean addLabels(Long nodeId, String... labels) {
-		Response resp = this.post(Lang.list("node", String.valueOf(nodeId)), JSON.toJSONString(labels));
+		Response resp = this.post(Lang.list("node", String.valueOf(nodeId), "labels"), JSON.toJSONString(labels));
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error("" + resp.getStatus() + JSON.toJSONString(resp));
 			return false;
 		}
 	}
