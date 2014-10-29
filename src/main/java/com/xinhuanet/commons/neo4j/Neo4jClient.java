@@ -1,5 +1,7 @@
 package com.xinhuanet.commons.neo4j;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -18,6 +20,20 @@ public class Neo4jClient extends RestfulClient {
 
 	public Neo4jClient(String url, String httpAuthUserName, String httpAuthPassword) {
 		super(url, httpAuthUserName, httpAuthPassword);
+	}
+
+	public List<String[]> cypherQuery(String cypher, Map<String, String> para) {
+		Map restParaMap = new HashMap<String, String>();
+		restParaMap.put("query", cypher);
+		restParaMap.put("params", para);
+		Response resp = this.post(Lang.list("cypher"), JSON.toJSONString(restParaMap));
+		String respJson = resp.readEntity(String.class);
+		Map respMap = JSON.parseObject(respJson, Map.class);
+		Object dataObj = respMap.get("data");
+		String dataStr = dataObj.toString();
+		List<String[]> data = JSON.parseArray(dataStr, String[].class);
+		return data;
+
 	}
 
 	public Boolean createNode(Map<String, String> para) {
