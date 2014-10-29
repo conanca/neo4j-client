@@ -3,12 +3,15 @@ package com.xinhuanet.commons.neo4j;
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSON;
 
 public class Neo4jClientTest {
 	private static Logger logger = LoggerFactory.getLogger(RestfulClientTest.class);
@@ -22,7 +25,10 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testCypherQuery() {
-		fail("Not yet implemented");
+
+		List<String[]> data = neo4jClient.cypherQuery("MATCH (n) RETURN id(n),n LIMIT 100", null);
+		logger.debug(JSON.toJSONString(data));
+
 	}
 
 	@Test
