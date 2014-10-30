@@ -153,4 +153,9 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
+	public Boolean createNode(String[] labels, Map<String, String> para) {
+		long nodeId = this.createNode(para);
+		return this.addNodeLabels(nodeId, labels);
+	}
+
 }

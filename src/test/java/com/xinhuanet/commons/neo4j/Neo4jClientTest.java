@@ -93,4 +93,12 @@ public class Neo4jClientTest {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void testCreateNodeWithLabels() {
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("testname", "abc");
+		String[] labels = { "UserNode" };
+		boolean a = neo4jClient.createNode(labels, para);
+		logger.debug("" + a);
+	}
 }
