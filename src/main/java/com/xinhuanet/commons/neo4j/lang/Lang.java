@@ -1,4 +1,4 @@
-package com.xinhuanet.commons.neo4j;
+package com.xinhuanet.commons.neo4j.lang;
 
 import java.util.ArrayList;
 

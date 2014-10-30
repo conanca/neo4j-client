@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.xinhuanet.commons.neo4j.lang.Lang;
 
 @Service("neo4jClient")
 public class Neo4jClient extends RestfulClient {
