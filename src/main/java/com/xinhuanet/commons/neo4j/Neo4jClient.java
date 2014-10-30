@@ -115,8 +115,13 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
-	public Long createRelation(Integer startNodeId, Integer endNodeId, Map<String, String> para) {
-		Response resp = this.post(Lang.list("node", String.valueOf(startNodeId), "relationships"), para);
+	public Long createRelation(Integer startNodeId, Integer endNodeId, String relType, Map<String, String> para) {
+		Map paraMap = new HashMap();
+		paraMap.put("to", this.url + "/node/" + endNodeId);
+		paraMap.put("type", relType);
+		paraMap.put("data", para);
+		Response resp = this.post(Lang.list("node", String.valueOf(startNodeId), "relationships"),
+				JSON.toJSONString(paraMap));
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
 			Map respMap = JSON.parseObject(respJson, Map.class);
