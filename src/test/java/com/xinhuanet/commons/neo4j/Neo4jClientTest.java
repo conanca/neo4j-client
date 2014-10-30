@@ -63,6 +63,32 @@ public class Neo4jClientTest {
 	}
 
 	@Test
+	public void testCreateRelationship() {
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("createdAt", System.currentTimeMillis() + "");
+		long relationshipId = neo4jClient.createRelation(1025L, 9054159L, "FOLLOWS", para);
+		logger.debug(relationshipId + "");
+	}
+
+	@Test
+	public void testUpdateRelationsihp() {
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("createdAt", System.currentTimeMillis() + "");
+		para.put("privateFlag", "true");
+		boolean flag = false;
+		flag = neo4jClient.updateRelation(19075977L, para);
+		logger.debug(flag + "");
+
+	}
+
+	@Test
+	public void testDeleteRelationship() {
+		boolean flag = false;
+		flag = neo4jClient.deleteRelation(19075977L);
+		logger.debug(flag + "");
+	}
+
+	@Test
 	public void testDeleteNode() {
 		fail("Not yet implemented");
 	}
