@@ -115,16 +115,36 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
-	public Boolean createRelation(Integer startUserId, Integer endUserId, String relType, Map<String, String> param) {
-		return true;
+	public Long createRelation(Integer startNodeId, Integer endNodeId, Map<String, String> para) {
+		Response resp = this.post(Lang.list("node", String.valueOf(startNodeId), "relationships"), para);
+		if (resp.getStatus() == 201) {
+			String respJson = resp.readEntity(String.class);
+			Map respMap = JSON.parseObject(respJson, Map.class);
+			Object selfObj = respMap.get("self");
+			String selfStr = selfObj.toString();
+			long selfRelationshipId = Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
+			return selfRelationshipId;
+		} else {
+			return -1L;
+		}
 	}
 
-	public Boolean updateRelation(Integer startUserId, Integer endUserId, String relType, Map<String, String> param) {
-		return true;
+	public Boolean updateRelation(Integer relationshipId, Map<String, String> para) {
+		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties"), para);
+		if (resp.getStatus() == 204) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public Boolean deleteRelation(Integer startUserId, Integer endUserId, String relType) {
-		return true;
+	public Boolean deleteRelation(Integer relationshipId) {
+		Response resp = this.delete(Lang.list("relationship", String.valueOf(relationshipId)));
+		if (resp.getStatus() == 204) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
