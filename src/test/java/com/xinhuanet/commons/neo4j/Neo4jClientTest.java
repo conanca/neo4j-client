@@ -41,24 +41,25 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testGetNode() {
-		Map data = neo4jClient.getNode(1025L);
+		Map data = neo4jClient.getNodeProperties(1025L);
 		logger.debug(JSON.toJSONString(data));
 	}
 
 	@Test
 	public void testAddLabels() {
-		boolean a = neo4jClient.addLabels(9054159L, "UserNode");
+		boolean a = neo4jClient.addNodeLabels(9054159L, "UserNode");
 		logger.debug("" + a);
 
 	}
 
 	@Test
 	public void testDeleteLabel() {
-		fail("Not yet implemented");
+		boolean a = neo4jClient.deleteNodeLabel(9054159L, "UserNode");
+		logger.debug("" + a);
 	}
 
 	@Test
-	public void testUpdateNode() {
+	public void testUpdateNodeProperties() {
 		fail("Not yet implemented");
 	}
 
