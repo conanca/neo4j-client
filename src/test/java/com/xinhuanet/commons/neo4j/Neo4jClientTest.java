@@ -25,10 +25,8 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testCypherQuery() {
-
 		List<String[]> data = neo4jClient.cypherQuery("MATCH (n) RETURN id(n),n LIMIT 100", null);
 		logger.debug(JSON.toJSONString(data));
-
 	}
 
 	@Test
@@ -49,7 +47,6 @@ public class Neo4jClientTest {
 	public void testAddLabels() {
 		boolean a = neo4jClient.addNodeLabels(9054159L, "UserNode");
 		logger.debug("" + a);
-
 	}
 
 	@Test
@@ -60,7 +57,9 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateNodeProperties() {
-		fail("Not yet implemented");
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("testname1", "abc1");
+		neo4jClient.updateNodeProperties(1025L, para);
 	}
 
 	@Test

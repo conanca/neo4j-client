@@ -90,6 +90,13 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
+	/**
+	 * 删除改节点原有属性，并设置新的指定属性
+	 * 
+	 * @param nodeId
+	 * @param para
+	 * @return
+	 */
 	public Boolean updateNodeProperties(Long nodeId, Map<String, String> para) {
 		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "properties"), para);
 		if (resp.getStatus() == 204) {
