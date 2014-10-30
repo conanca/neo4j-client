@@ -60,7 +60,9 @@ public class Neo4jClient extends RestfulClient {
 			String jsonResp = resp.readEntity(String.class);
 			if (!StringUtils.isEmpty(jsonResp)) {
 				Map m = JSON.parseObject(jsonResp, Map.class);
-				return m;
+				Object dataObj = m.get("data");
+				Map dataMap = JSON.parseObject(dataObj.toString(), Map.class);
+				return dataMap;
 			} else {
 				return null;
 			}

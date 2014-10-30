@@ -41,7 +41,8 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testGetNode() {
-		fail("Not yet implemented");
+		Map data = neo4jClient.getNode(1025L);
+		logger.debug(JSON.toJSONString(data));
 	}
 
 	@Test
