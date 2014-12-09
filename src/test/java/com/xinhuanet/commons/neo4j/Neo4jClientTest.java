@@ -1,7 +1,5 @@
 package com.xinhuanet.commons.neo4j;
 
-import static org.junit.Assert.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,17 +64,17 @@ public class Neo4jClientTest {
 	public void testCreateRelationship() {
 		Map<String, String> para = new HashMap<String, String>();
 		para.put("createdAt", System.currentTimeMillis() + "");
-		long relationshipId = neo4jClient.createRelation(1025L, 9054159L, "FOLLOWS", para);
+		long relationshipId = neo4jClient.createRelationship(1025L, 9054159L, "FOLLOWS", para);
 		logger.debug(relationshipId + "");
 	}
 
 	@Test
-	public void testUpdateRelationsihp() {
+	public void testUpdateRelationsihpProperties() {
 		Map<String, String> para = new HashMap<String, String>();
 		para.put("createdAt", System.currentTimeMillis() + "");
 		para.put("privateFlag", "true");
 		boolean flag = false;
-		flag = neo4jClient.updateRelation(19075977L, para);
+		flag = neo4jClient.updateRelationshipProperties(19075977L, para);
 		logger.debug(flag + "");
 
 	}
@@ -84,13 +82,19 @@ public class Neo4jClientTest {
 	@Test
 	public void testDeleteRelationship() {
 		boolean flag = false;
-		flag = neo4jClient.deleteRelation(19075977L);
+		flag = neo4jClient.deleteRelationship(19075977L);
 		logger.debug(flag + "");
 	}
 
 	@Test
 	public void testDeleteNode() {
-		fail("Not yet implemented");
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("testname", "abc");
+		Long id = neo4jClient.createNode(para);
+		logger.debug(id + "");
+		boolean flag = false;
+		flag = neo4jClient.deleteNode(id);
+		logger.debug(flag + "");
 	}
 
 	@Test

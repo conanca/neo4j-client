@@ -115,7 +115,7 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
-	public Long createRelation(Long startNodeId, Long endNodeId, String relType, Map<String, String> para) {
+	public Long createRelationship(Long startNodeId, Long endNodeId, String relType, Map<String, String> para) {
 		Map paraMap = new HashMap();
 		paraMap.put("to", this.getUrl() + "/node/" + endNodeId);
 		paraMap.put("type", relType);
@@ -134,7 +134,7 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
-	public Boolean updateRelation(Long relationshipId, Map<String, String> para) {
+	public Boolean updateRelationshipProperties(Long relationshipId, Map<String, String> para) {
 		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties"),
 				JSON.toJSONString(para));
 		if (resp.getStatus() == 204) {
@@ -144,7 +144,7 @@ public class Neo4jClient extends RestfulClient {
 		}
 	}
 
-	public Boolean deleteRelation(Long relationshipId) {
+	public Boolean deleteRelationship(Long relationshipId) {
 		Response resp = this.delete(Lang.list("relationship", String.valueOf(relationshipId)));
 		if (resp.getStatus() == 204) {
 			return true;
