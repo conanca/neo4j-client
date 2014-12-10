@@ -115,8 +115,23 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateNodeLabel() throws Exception {
-		boolean a = neo4jClient.addNodeLabel(9054159L, "UserNode1","UserNode2");
+		boolean a = neo4jClient.updateNodeLabel(9054159L, "UserNode1", "UserNode2");
 		logger.debug("" + a);
+	}
 
+	@Test
+	public void testUpdateNodeProperty() throws Exception {
+		neo4jClient.updateNodeProperty(1025L, "testname1", "abcdefg");
+	}
+
+	@Test
+	public void testGetRelationshipProperties() throws Exception {
+		Map data = neo4jClient.getRelationshipProperties(4680053L);
+		logger.debug(JSON.toJSONString(data));
+	}
+
+	@Test
+	public void testUpdateRelationshipProperty() throws Exception {
+		neo4jClient.updateNodeProperty(4680053L, "testname1", "abcdefg");
 	}
 }
