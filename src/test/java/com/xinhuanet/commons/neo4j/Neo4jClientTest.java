@@ -105,4 +105,18 @@ public class Neo4jClientTest {
 		Long id = neo4jClient.createNode(labels, para);
 		logger.debug("" + id);
 	}
+
+
+	@Test
+	public void testGetNodeLabels() throws Exception {
+		String[] labels = neo4jClient.getNodeLabels(1026L);
+		logger.debug(JSON.toJSONString(labels));
+	}
+
+	@Test
+	public void testUpdateNodeLabel() throws Exception {
+		boolean a = neo4jClient.addNodeLabel(9054159L, "UserNode1","UserNode2");
+		logger.debug("" + a);
+
+	}
 }
