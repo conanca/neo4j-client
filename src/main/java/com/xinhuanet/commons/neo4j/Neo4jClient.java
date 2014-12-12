@@ -2,9 +2,9 @@ package com.xinhuanet.commons.neo4j;
 
 import com.alibaba.fastjson.JSON;
 import com.xinhuanet.commons.neo4j.lang.Lang;
+import com.xinhuanet.commons.neo4j.lang.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class Neo4jClient extends RestfulClient {
 		Response resp = this.get(Lang.list("node", String.valueOf(nodeId)));
 		if (resp.getStatus() == 200) {
 			String jsonResp = resp.readEntity(String.class);
-			if (!StringUtils.isEmpty(jsonResp)) {
+			if (!Strings.isEmpty(jsonResp)) {
 				Map m = JSON.parseObject(jsonResp, Map.class);
 				Object dataObj = m.get("data");
 				Map dataMap = JSON.parseObject(dataObj.toString(), Map.class);
@@ -96,7 +96,7 @@ public class Neo4jClient extends RestfulClient {
 		Response resp = this.get(Lang.list("node", String.valueOf(nodeId), "labels"));
 		if (resp.getStatus() == 200) {
 			String jsonResp = resp.readEntity(String.class);
-			if (!StringUtils.isEmpty(jsonResp)) {
+			if (!Strings.isEmpty(jsonResp)) {
 				return JSON.parseObject(jsonResp, String[].class);
 			} else {
 				return null;
@@ -242,7 +242,7 @@ public class Neo4jClient extends RestfulClient {
 		Response resp = this.get(Lang.list("relationship", String.valueOf(nodeId), "properties"));
 		if (resp.getStatus() == 200) {
 			String jsonResp = resp.readEntity(String.class);
-			if (!StringUtils.isEmpty(jsonResp)) {
+			if (!Strings.isEmpty(jsonResp)) {
 				return JSON.parseObject(jsonResp, Map.class);
 			} else {
 				return null;

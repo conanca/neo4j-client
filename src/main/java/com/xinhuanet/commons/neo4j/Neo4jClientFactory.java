@@ -1,9 +1,9 @@
 package com.xinhuanet.commons.neo4j;
 
+import com.xinhuanet.commons.neo4j.lang.Strings;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-import org.springframework.util.StringUtils;
 
 public class Neo4jClientFactory extends BasePooledObjectFactory<Neo4jClient> {
 
@@ -25,10 +25,10 @@ public class Neo4jClientFactory extends BasePooledObjectFactory<Neo4jClient> {
 
 	@Override
 	public Neo4jClient create() throws Exception {
-		if (!StringUtils.isEmpty(url) && !StringUtils.isEmpty(httpAuthUserName)
-				&& !StringUtils.isEmpty(httpAuthPassword)) {
+		if (!Strings.isEmpty(url) && !Strings.isEmpty(httpAuthUserName)
+				&& !Strings.isEmpty(httpAuthPassword)) {
 			return new Neo4jClient(url, httpAuthUserName, httpAuthPassword);
-		} else if (!StringUtils.isEmpty(url)) {
+		} else if (!Strings.isEmpty(url)) {
 			return new Neo4jClient(url);
 		} else {
 			// TODO
