@@ -1,20 +1,16 @@
 package com.xinhuanet.commons.neo4j;
 
+import com.alibaba.fastjson.JSON;
+import com.xinhuanet.commons.neo4j.lang.Lang;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import com.alibaba.fastjson.JSON;
-import com.xinhuanet.commons.neo4j.lang.Lang;
-
-@Service("neo4jClient")
 public class Neo4jClient extends RestfulClient {
 	private static Logger logger = LoggerFactory.getLogger(Neo4jClient.class);
 
