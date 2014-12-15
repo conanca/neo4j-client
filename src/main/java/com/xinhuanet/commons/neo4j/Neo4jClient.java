@@ -29,7 +29,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para cypher中的参数Map
 	 * @return 返回cypher return的结果列表，其中元素为JSON字符串数组，表示每个Column
 	 */
-	public List<String[]> cypherQuery(String cypher, Map<String, String> para) {
+	public List<String[]> cypherQuery(String cypher, Map<String, Object> para) {
 		Map restParaMap = new HashMap<String, String>();
 		restParaMap.put("query", cypher);
 		restParaMap.put("params", para);
@@ -49,7 +49,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para 属性Map
 	 * @return
 	 */
-	public Long createNode(Map<String, String> para) {
+	public Long createNode(Map<String, Object> para) {
 		Response resp = this.post(Lang.list("node"), para);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
@@ -180,7 +180,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para 属性Map
 	 * @return
 	 */
-	public Boolean updateNodeProperties(Long nodeId, Map<String, String> para) {
+	public Boolean updateNodeProperties(Long nodeId, Map<String, Object> para) {
 		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "properties"), para);
 		if (resp.getStatus() == 204) {
 			return true;
@@ -213,7 +213,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para 属性Map
 	 * @return
 	 */
-	public Long createRelationship(Long startNodeId, Long endNodeId, String relType, Map<String, String> para) {
+	public Long createRelationship(Long startNodeId, Long endNodeId, String relType, Map<String, Object> para) {
 		Map paraMap = new HashMap();
 		paraMap.put("to", this.getUrl() + "/node/" + endNodeId);
 		paraMap.put("type", relType);
@@ -277,7 +277,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para 属性Map
 	 * @return
 	 */
-	public Boolean updateRelationshipProperties(Long relationshipId, Map<String, String> para) {
+	public Boolean updateRelationshipProperties(Long relationshipId, Map<String, Object> para) {
 		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties"),
 				JSON.toJSONString(para));
 		if (resp.getStatus() == 204) {
@@ -309,7 +309,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @param para
 	 * @return
 	 */
-	public Long createNode(String[] labels, Map<String, String> para) {
+	public Long createNode(String[] labels, Map<String, Object> para) {
 		long nodeId = this.createNode(para);
 		addNodeLabel(nodeId, labels);
 		return nodeId;

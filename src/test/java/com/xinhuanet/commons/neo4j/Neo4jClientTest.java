@@ -1,15 +1,14 @@
 package com.xinhuanet.commons.neo4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Neo4jClientTest {
 	private static Logger logger = LoggerFactory.getLogger(RestfulClientTest.class);
@@ -29,7 +28,7 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testCreateNode() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname", "abc");
 		Long id = neo4jClient.createNode(para);
 		logger.debug("id:" + id);
@@ -55,14 +54,14 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateNodeProperties() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname1", "abc1");
 		neo4jClient.updateNodeProperties(1025L, para);
 	}
 
 	@Test
 	public void testCreateRelationship() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("createdAt", System.currentTimeMillis() + "");
 		long relationshipId = neo4jClient.createRelationship(1025L, 9054159L, "FOLLOWS", para);
 		logger.debug(relationshipId + "");
@@ -70,9 +69,9 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateRelationsihpProperties() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("createdAt", System.currentTimeMillis() + "");
-		para.put("privateFlag", "true");
+		para.put("privateFlag", true);
 		boolean flag = false;
 		flag = neo4jClient.updateRelationshipProperties(19075977L, para);
 		logger.debug(flag + "");
@@ -88,7 +87,7 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testDeleteNode() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname", "abc");
 		Long id = neo4jClient.createNode(para);
 		logger.debug(id + "");
@@ -99,7 +98,7 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testCreateNodeWithLabels() {
-		Map<String, String> para = new HashMap<String, String>();
+		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname", "abc");
 		String[] labels = { "UserNode" };
 		Long id = neo4jClient.createNode(labels, para);

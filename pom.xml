@@ -4,7 +4,7 @@
 
 	<groupId>com.xinhuanet.commons</groupId>
 	<artifactId>jersey-neo4j</artifactId>
-	<version>0.2</version>
+	<version>0.3</version>
 	<packaging>jar</packaging>
 
 	<name>jersey-neo4j</name>
