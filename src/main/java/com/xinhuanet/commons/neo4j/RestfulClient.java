@@ -1,20 +1,18 @@
 package com.xinhuanet.commons.neo4j;
 
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 /**
  * 一个简单的Restful客户端类，http响应内容为JSON格式。
@@ -55,21 +53,12 @@ public class RestfulClient {
 		}
 	}
 
-	public Response post(List<String> resources, String para) {
+	public Response post(List<String> resources, Object para) {
 		WebTarget target = createWebTarget(resources);
+		String json = JSON.toJSONString(para);
+		logger.debug(json);
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
-				Entity.entity(para, MediaType.APPLICATION_JSON));
-		return response;
-	}
-
-	public Response post(List<String> resources, Map<String, String> para) {
-		WebTarget target = createWebTarget(resources);
-		Form form = new Form();
-		for (String key : para.keySet()) {
-			form.param(key, para.get(key));
-		}
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
-				Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+				Entity.entity(json, MediaType.APPLICATION_JSON));
 		return response;
 	}
 
@@ -85,21 +74,12 @@ public class RestfulClient {
 		return response;
 	}
 
-	public Response put(List<String> resources, String para) {
+	public Response put(List<String> resources, Object para) {
 		WebTarget target = createWebTarget(resources);
+		String json = JSON.toJSONString(para);
+		logger.debug(json);
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
-				Entity.entity(para, MediaType.APPLICATION_JSON));
-		return response;
-	}
-
-	public Response put(List<String> resources, Map<String, String> para) {
-		WebTarget target = createWebTarget(resources);
-		Form form = new Form();
-		for (String key : para.keySet()) {
-			form.param(key, para.get(key));
-		}
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
-				Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+				Entity.entity(json, MediaType.APPLICATION_JSON));
 		return response;
 	}
 

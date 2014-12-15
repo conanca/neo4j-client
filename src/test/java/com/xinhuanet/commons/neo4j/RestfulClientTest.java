@@ -1,20 +1,18 @@
 package com.xinhuanet.commons.neo4j;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.Response;
-
+import com.alibaba.fastjson.JSON;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.fail;
 
 public class RestfulClientTest {
 	private static Logger logger = LoggerFactory.getLogger(RestfulClientTest.class);
@@ -86,10 +84,10 @@ public class RestfulClientTest {
 	public void testPut() {
 		List<String> resources = new ArrayList<String>();
 		resources.add("node");
-		resources.add("9054153");
+		resources.add("9055500");
 		resources.add("properties");
-		Map<String, String> form = new HashMap<String, String>();
-		form.put("createdAt", "1411");
+		Map<String, Object> form = new HashMap<String, Object>();
+		form.put("createdAt", 1411);
 		Response response = restfulClient.put(resources, form);
 		logger.debug("Status:" + response.getStatus());
 		logger.debug("data:" + response);

@@ -33,7 +33,7 @@ public class Neo4jClient extends RestfulClient {
 		Map restParaMap = new HashMap<String, String>();
 		restParaMap.put("query", cypher);
 		restParaMap.put("params", para);
-		Response resp = this.post(Lang.list("cypher"), JSON.toJSONString(restParaMap));
+		Response resp = this.post(Lang.list("cypher"), restParaMap);
 		String respJson = resp.readEntity(String.class);
 		Map respMap = JSON.parseObject(respJson, Map.class);
 		Object dataObj = respMap.get("data");
