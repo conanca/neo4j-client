@@ -27,6 +27,14 @@ public class Neo4jClientTest {
 	}
 
 	@Test
+	public void testCypherQueryReturnInt() {
+		Map para = new HashMap();
+		para.put("userId",2955888);
+		List<String[]> data = neo4jClient.cypherQuery("MATCH (user:UserNode { userId: {userId} }) RETURN id(user)", para);
+		logger.debug(JSON.toJSONString(data));
+	}
+
+	@Test
 	public void testCreateNode() {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname", "abc");
@@ -42,13 +50,15 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testAddLabels() {
-		boolean a = neo4jClient.addNodeLabel(9054159L, "UserNode");
+		String[] labels = {"UserNode"};
+		boolean a = neo4jClient.addNodeLabel(9054159L, labels);
 		logger.debug("" + a);
 	}
 
 	@Test
 	public void testDeleteLabel() {
-		boolean a = neo4jClient.deleteNodeLabel(9054159L, "UserNode");
+		String[] labels = {"UserNode"};
+		boolean a = neo4jClient.deleteNodeLabel(9054159L, labels);
 		logger.debug("" + a);
 	}
 
@@ -114,7 +124,8 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateNodeLabel() throws Exception {
-		boolean a = neo4jClient.updateNodeLabel(9054159L, "UserNode1", "UserNode2");
+		String[] labels = {"UserNode","UserNode2"};
+		boolean a = neo4jClient.updateNodeLabel(9054159L, labels);
 		logger.debug("" + a);
 	}
 
