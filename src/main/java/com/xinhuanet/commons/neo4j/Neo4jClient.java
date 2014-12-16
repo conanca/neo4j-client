@@ -295,7 +295,7 @@ public class Neo4jClient extends RestfulClient {
 	 */
 	public Boolean updateRelationshipProperties(Long relationshipId, Map<String, Object> para) {
 		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties"),
-				JSON.toJSONString(para));
+				para);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {

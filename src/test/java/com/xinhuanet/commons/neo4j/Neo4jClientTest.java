@@ -10,10 +10,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 public class Neo4jClientTest {
 	private static Logger logger = LoggerFactory.getLogger(RestfulClientTest.class);
 
 	private static Neo4jClient neo4jClient;
+
+	public Long createTestNode(){
+		Map<String, Object> para = new HashMap<String, Object>();
+		para.put("testname", "abc");
+		String[] labels = { "TestNode" };
+		return neo4jClient.createNode(labels, para);
+	}
+
+	public Long createTestRelationship(){
+		Long id1 = createTestNode();
+		Long id2 = createTestNode();
+		Map<String, Object> para = new HashMap<String, Object>();
+		para.put("createdAt", System.currentTimeMillis());
+		return neo4jClient.createRelationship(id1, id2, "TestRelType", para);
+	}
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -22,8 +41,9 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testCypherQuery() {
-		List<String[]> data = neo4jClient.cypherQuery("MATCH (n) RETURN id(n),n LIMIT 100", null);
+		List<String[]> data = neo4jClient.cypherQuery("MATCH (n) RETURN id(n),n LIMIT 10", null);
 		logger.debug(JSON.toJSONString(data));
+		assertTrue(JSON.toJSONString(data).contains("self"));
 	}
 
 	@Test
@@ -32,6 +52,7 @@ public class Neo4jClientTest {
 		para.put("userId",2955888);
 		List<String[]> data = neo4jClient.cypherQuery("MATCH (user:UserNode { userId: {userId} }) RETURN id(user)", para);
 		logger.debug(JSON.toJSONString(data));
+		assertEquals("2938130",data.get(0)[0]);
 	}
 
 	@Test
@@ -40,107 +61,143 @@ public class Neo4jClientTest {
 		para.put("testname", "abc");
 		Long id = neo4jClient.createNode(para);
 		logger.debug("id:" + id);
+		assertTrue(id>0);
 	}
 
 	@Test
-	public void testGetNode() {
-		Map data = neo4jClient.getNodeProperties(1025L);
+	public void testGetNodeProperties() {
+		Long id = createTestNode();
+
+		Map data = neo4jClient.getNodeProperties(id);
 		logger.debug(JSON.toJSONString(data));
+		assertEquals("abc",data.get("testname"));
 	}
 
 	@Test
 	public void testAddLabels() {
-		String[] labels = {"UserNode","TestNode"};
-		boolean a = neo4jClient.addNodeLabel(9054159L, labels);
+		Long id = createTestNode();
+
+		String[] labels = {"TestNode1","TestNode2"};
+		boolean a = neo4jClient.addNodeLabel(id, labels);
 		logger.debug("" + a);
+		assertTrue(a);
 	}
 
 	@Test
 	public void testDeleteLabel() {
-		boolean a = neo4jClient.deleteNodeLabel(9054159L, "UserNode");
+		Long id = createTestNode();
+
+		boolean a = neo4jClient.deleteNodeLabel(id, "TestNode");
 		logger.debug("" + a);
+		assertTrue(a);
 	}
 
 	@Test
 	public void testUpdateNodeProperties() {
+		Long id = createTestNode();
+
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname1", "abc1");
-		neo4jClient.updateNodeProperties(1025L, para);
+		boolean a = neo4jClient.updateNodeProperties(id, para);
+		assertTrue(a);
 	}
 
 	@Test
 	public void testCreateRelationship() {
+		Long id1 = createTestNode();
+		Long id2 = createTestNode();
+
 		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("createdAt", System.currentTimeMillis() + "");
-		long relationshipId = neo4jClient.createRelationship(1025L, 9054159L, "FOLLOWS", para);
+		para.put("createdAt", System.currentTimeMillis());
+		long relationshipId = neo4jClient.createRelationship(id1, id2, "TestRelType", para);
 		logger.debug(relationshipId + "");
+		assertTrue(relationshipId>0);
 	}
 
 	@Test
-	public void testUpdateRelationsihpProperties() {
+	public void testUpdateRelationshipProperties() {
+		Long id= createTestRelationship();
+
 		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("createdAt", System.currentTimeMillis() + "");
+		para.put("createdAt", System.currentTimeMillis());
 		para.put("privateFlag", true);
 		boolean flag = false;
-		flag = neo4jClient.updateRelationshipProperties(19075977L, para);
+		flag = neo4jClient.updateRelationshipProperties(id, para);
 		logger.debug(flag + "");
-
+		assertTrue(flag);
 	}
 
 	@Test
 	public void testDeleteRelationship() {
+		Long id= createTestRelationship();
+
 		boolean flag = false;
-		flag = neo4jClient.deleteRelationship(19075977L);
+		flag = neo4jClient.deleteRelationship(id);
 		logger.debug(flag + "");
+		assertTrue(flag);
 	}
 
 	@Test
 	public void testDeleteNode() {
-		Map<String, Object> para = new HashMap<String, Object>();
-		para.put("testname", "abc");
-		Long id = neo4jClient.createNode(para);
-		logger.debug(id + "");
+		Long id = createTestNode();
 		boolean flag = false;
 		flag = neo4jClient.deleteNode(id);
 		logger.debug(flag + "");
+		assertTrue(flag);
 	}
 
 	@Test
 	public void testCreateNodeWithLabels() {
 		Map<String, Object> para = new HashMap<String, Object>();
 		para.put("testname", "abc");
-		String[] labels = { "UserNode" };
+		String[] labels = { "TestNodeAAA" };
 		Long id = neo4jClient.createNode(labels, para);
 		logger.debug("" + id);
+		assertTrue(id>0);
 	}
 
 
 	@Test
 	public void testGetNodeLabels() throws Exception {
-		String[] labels = neo4jClient.getNodeLabels(1026L);
+		Long id = createTestNode();
+		String[] labels = neo4jClient.getNodeLabels(id);
 		logger.debug(JSON.toJSONString(labels));
+		assertEquals("TestNode",labels[0]);
 	}
 
 	@Test
 	public void testUpdateNodeLabel() throws Exception {
-		String[] labels = {"UserNode","UserNode2"};
-		boolean a = neo4jClient.updateNodeLabel(9054159L, labels);
+		Long id = createTestNode();
+
+		String[] labels = {"TestNode1","TestNode2"};
+		boolean a = neo4jClient.updateNodeLabel(id, labels);
 		logger.debug("" + a);
+		assertTrue(a);
 	}
 
 	@Test
 	public void testUpdateNodeProperty() throws Exception {
-		neo4jClient.updateNodeProperty(1025L, "testname1", "abcdefg");
+		Long id = createTestNode();
+
+		boolean a = neo4jClient.updateNodeProperty(id, "testname", "abcdefg");
+		logger.debug("" + a);
+		assertTrue(a);
 	}
 
 	@Test
 	public void testGetRelationshipProperties() throws Exception {
-		Map data = neo4jClient.getRelationshipProperties(4680053L);
+		Long id = createTestRelationship();
+
+		Map data = neo4jClient.getRelationshipProperties(id);
 		logger.debug(JSON.toJSONString(data));
+		assertNotNull(data.get("createdAt"));
 	}
 
 	@Test
 	public void testUpdateRelationshipProperty() throws Exception {
-		neo4jClient.updateRelationshipProperty(4680053L, "testname1", "abcdefg");
+		Long id = createTestRelationship();
+		boolean a = neo4jClient.updateRelationshipProperty(id, "testname1", "abcdefg");
+		logger.debug("" + a);
+		assertTrue(a);
 	}
 }
