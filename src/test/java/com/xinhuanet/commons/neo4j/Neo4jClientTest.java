@@ -50,15 +50,14 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testAddLabels() {
-		String[] labels = {"UserNode"};
+		String[] labels = {"UserNode","TestNode"};
 		boolean a = neo4jClient.addNodeLabel(9054159L, labels);
 		logger.debug("" + a);
 	}
 
 	@Test
 	public void testDeleteLabel() {
-		String[] labels = {"UserNode"};
-		boolean a = neo4jClient.deleteNodeLabel(9054159L, labels);
+		boolean a = neo4jClient.deleteNodeLabel(9054159L, "UserNode");
 		logger.debug("" + a);
 	}
 

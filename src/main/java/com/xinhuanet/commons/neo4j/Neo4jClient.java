@@ -114,7 +114,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @return
 	 */
 	public Boolean addNodeLabel(Long nodeId, String[] labels) {
-		Response resp = this.post(Lang.list("node", String.valueOf(nodeId), "labels"), JSON.toJSONString(labels));
+		Response resp = this.post(Lang.list("node", String.valueOf(nodeId), "labels"), labels);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
@@ -131,7 +131,7 @@ public class Neo4jClient extends RestfulClient {
 	 * @return
 	 */
 	public Boolean updateNodeLabel(Long nodeId, String[] labels) {
-		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "labels"), JSON.toJSONString(labels));
+		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "labels"), labels);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
@@ -147,8 +147,8 @@ public class Neo4jClient extends RestfulClient {
 	 * @param label
 	 * @return
 	 */
-	public Boolean deleteNodeLabel(Long nodeId, String[] label) {
-		Response resp = this.delete(Lang.list("node", String.valueOf(nodeId), "labels", JSON.toJSONString(label)));
+	public Boolean deleteNodeLabel(Long nodeId, String label) {
+		Response resp = this.delete(Lang.list("node", String.valueOf(nodeId), "labels", label));
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
