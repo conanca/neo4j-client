@@ -1,11 +1,5 @@
 package com.xinhuanet.commons.neo4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import javax.ws.rs.core.Response;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.alibaba.fastjson.JSON;
+import static junit.framework.TestCase.assertNotNull;
 
 public class Neo4jClientPoolTest {
 	private static Logger logger = LoggerFactory.getLogger(Neo4jClientPoolTest.class);
@@ -28,15 +22,11 @@ public class Neo4jClientPoolTest {
 	}
 
 	@Test
-	public void test() throws NoSuchElementException, IllegalStateException, Exception {
+	public void test() throws Exception {
 		Neo4jClient client = neo4jClientPool.borrowObject();
-		List<String> resources = new ArrayList<String>();
-		resources.add("node");
-		resources.add("1025");
-		Response response = client.get(resources);
-		logger.debug(JSON.toJSONString(response));
-		logger.debug("Status:" + response.getStatus());
-		logger.debug("Content:" + response.readEntity(String.class));
+		assertNotNull(client);
+		assertNotNull(client.getUrl());
+		logger.debug(client.getUrl());
 		neo4jClientPool.returnObject(client);
 	}
 

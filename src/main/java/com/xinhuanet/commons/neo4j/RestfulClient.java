@@ -15,9 +15,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * 一个简单的Restful客户端类，http响应内容为JSON格式。
- * 
- * @author conanca
+ * 对jersey client的简单封装，http响应内容为JSON格式。
  * 
  */
 public class RestfulClient {
@@ -25,14 +23,6 @@ public class RestfulClient {
 
 	private Client client;
 	private String url;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 
 	public RestfulClient(String url) {
 		client = ClientBuilder.newClient();
@@ -56,38 +46,27 @@ public class RestfulClient {
 	public Response post(List<String> resources, Object para) {
 		WebTarget target = createWebTarget(resources);
 		String json = JSON.toJSONString(para);
-		logger.debug(json);
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).post(
+		logger.debug("parameter : "+json);
+		return target.request(MediaType.APPLICATION_JSON_TYPE).post(
 				Entity.entity(json, MediaType.APPLICATION_JSON));
-		return response;
 	}
 
 	public Response get(List<String> resources) {
 		WebTarget target = createWebTarget(resources);
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
-		return response;
+		return target.request(MediaType.APPLICATION_JSON_TYPE).get();
 	}
 
 	public Response delete(List<String> resources) {
 		WebTarget target = createWebTarget(resources);
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).delete();
-		return response;
+		return target.request(MediaType.APPLICATION_JSON_TYPE).delete();
 	}
 
 	public Response put(List<String> resources, Object para) {
 		WebTarget target = createWebTarget(resources);
 		String json = JSON.toJSONString(para);
-		logger.debug(json);
-		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).put(
+		logger.debug("parameter : "+json);
+		return target.request(MediaType.APPLICATION_JSON_TYPE).put(
 				Entity.entity(json, MediaType.APPLICATION_JSON));
-		return response;
-	}
-
-	public Response queryViaCypher(List<String> resources, String cypher) {
-		WebTarget target = createWebTarget(resources);
-		Response response = target.request(MediaType.APPLICATION_JSON).post(
-				Entity.entity(cypher, MediaType.APPLICATION_JSON));
-		return response;
 	}
 
 	private WebTarget createWebTarget(List<String> resources) {
@@ -95,16 +74,16 @@ public class RestfulClient {
 		for (String resource : resources) {
 			target = target.path(resource);
 		}
-		logger.debug(target.getUri().getPath());
+		logger.debug("uri : "+target.getUri().getPath());
 		return target;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 
 	public Client client() {
 		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 }

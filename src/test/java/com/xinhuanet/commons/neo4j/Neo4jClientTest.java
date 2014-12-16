@@ -141,6 +141,6 @@ public class Neo4jClientTest {
 
 	@Test
 	public void testUpdateRelationshipProperty() throws Exception {
-		neo4jClient.updateNodeProperty(4680053L, "testname1", "abcdefg");
+		neo4jClient.updateRelationshipProperty(4680053L, "testname1", "abcdefg");
 	}
 }

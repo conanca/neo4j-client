@@ -25,63 +25,69 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 执行cypher语句
 	 * 
-	 * @param cypher
+	 * @param cypher cypher语句
 	 * @param para cypher中的参数Map
 	 * @return 返回cypher return的结果列表，其中元素为JSON字符串数组，表示每个Column
 	 */
 	public List<String[]> cypherQuery(String cypher, Map<String, Object> para) {
-		Map restParaMap = new HashMap<String, String>();
+		Map<String, Object> restParaMap = new HashMap<String, Object>();
 		restParaMap.put("query", cypher);
 		restParaMap.put("params", para);
 		Response resp = this.post(Lang.list("cypher"), restParaMap);
 		String respJson = resp.readEntity(String.class);
-		Map respMap = JSON.parseObject(respJson, Map.class);
-		Object dataObj = respMap.get("data");
-		String dataStr = dataObj.toString();
-		List<String[]> data = JSON.parseArray(dataStr, String[].class);
-		return data;
-
+		if (!Strings.isEmpty(respJson)) {
+			Map respMap = JSON.parseObject(respJson, Map.class);
+			Object dataObj = respMap.get("data");
+			String dataStr = dataObj.toString();
+			return  JSON.parseArray(dataStr, String[].class);
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * 创建节点并指定属性
 	 * 
 	 * @param para 属性Map
-	 * @return
+	 * @return 创建的节点Id
 	 */
 	public Long createNode(Map<String, Object> para) {
 		Response resp = this.post(Lang.list("node"), para);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			Map respMap = JSON.parseObject(respJson, Map.class);
-			Object selfObj = respMap.get("self");
-			String selfStr = selfObj.toString();
-			long selfNodeId = Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
-			return selfNodeId;
+			if (!Strings.isEmpty(respJson)) {
+				Map respMap = JSON.parseObject(respJson, Map.class);
+				Object selfObj = respMap.get("self");
+				String selfStr = selfObj.toString();
+				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
+			} else {
+				return null;
+			}
 		} else {
-			return -1L;
+			logger.error(JSON.toJSONString(resp));
+			return null;
 		}
 	}
 
 	/**
 	 * 获取指定Id的节点的属性
 	 * 
-	 * @param nodeId
+	 * @param nodeId 节点Id
 	 * @return 属性Map
 	 */
 	public Map getNodeProperties(Long nodeId) {
 		Response resp = this.get(Lang.list("node", String.valueOf(nodeId)));
 		if (resp.getStatus() == 200) {
-			String jsonResp = resp.readEntity(String.class);
-			if (!Strings.isEmpty(jsonResp)) {
-				Map m = JSON.parseObject(jsonResp, Map.class);
+			String respJson = resp.readEntity(String.class);
+			if (!Strings.isEmpty(respJson)) {
+				Map m = JSON.parseObject(respJson, Map.class);
 				Object dataObj = m.get("data");
-				Map dataMap = JSON.parseObject(dataObj.toString(), Map.class);
-				return dataMap;
+				return JSON.parseObject(dataObj.toString(), Map.class);
 			} else {
 				return null;
 			}
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return null;
 		}
 	}
@@ -89,19 +95,20 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 获取指定Id的节点的Labels
 	 * 
-	 * @param nodeId
+	 * @param nodeId 节点Id
 	 * @return Label数组
 	 */
 	public String[] getNodeLabels(Long nodeId) {
 		Response resp = this.get(Lang.list("node", String.valueOf(nodeId), "labels"));
 		if (resp.getStatus() == 200) {
-			String jsonResp = resp.readEntity(String.class);
-			if (!Strings.isEmpty(jsonResp)) {
-				return JSON.parseObject(jsonResp, String[].class);
+			String respJson = resp.readEntity(String.class);
+			if (!Strings.isEmpty(respJson)) {
+				return JSON.parseObject(respJson, String[].class);
 			} else {
 				return null;
 			}
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return null;
 		}
 	}
@@ -109,16 +116,16 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 为指定Id的节点添加Label
 	 * 
-	 * @param nodeId
-	 * @param labels
-	 * @return
+	 * @param nodeId 节点Id
+	 * @param labels 标签数组
+	 * @return 操作是否成功
 	 */
 	public Boolean addNodeLabel(Long nodeId, String[] labels) {
 		Response resp = this.post(Lang.list("node", String.valueOf(nodeId), "labels"), labels);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
-			logger.error("" + resp.getStatus() + JSON.toJSONString(resp));
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -126,16 +133,16 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除改指定Id的节点原有Label，并设置新的指定Label
 	 * 
-	 * @param nodeId
-	 * @param labels
-	 * @return
+	 * @param nodeId 节点Id
+	 * @param labels 新标签数组
+	 * @return 操作是否成功
 	 */
 	public Boolean updateNodeLabel(Long nodeId, String[] labels) {
 		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "labels"), labels);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
-			logger.error("" + resp.getStatus() + JSON.toJSONString(resp));
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -143,15 +150,16 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除改指定Id的节点的指定Label
 	 * 
-	 * @param nodeId
-	 * @param label
-	 * @return
+	 * @param nodeId 节点Id
+	 * @param label 标签
+	 * @return 操作是否成功
 	 */
 	public Boolean deleteNodeLabel(Long nodeId, String label) {
 		Response resp = this.delete(Lang.list("node", String.valueOf(nodeId), "labels", label));
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -159,16 +167,17 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 设置指定Id的节点的指定属性的值
 	 * 
-	 * @param nodeId
-	 * @param propertyName
-	 * @param propertyValue
-	 * @return
+	 * @param nodeId 节点Id
+	 * @param propertyName 属性名
+	 * @param propertyValue 属性值
+	 * @return 操作是否成功
 	 */
 	public Boolean updateNodeProperty(Long nodeId, String propertyName, String propertyValue) {
 		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "properties", propertyName), propertyValue);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -176,15 +185,16 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除改指定Id的节点原有属性，并设置新的指定属性
 	 * 
-	 * @param nodeId
+	 * @param nodeId 节点Id
 	 * @param para 属性Map
-	 * @return
+	 * @return 操作是否成功
 	 */
 	public Boolean updateNodeProperties(Long nodeId, Map<String, Object> para) {
 		Response resp = this.put(Lang.list("node", String.valueOf(nodeId), "properties"), para);
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -192,14 +202,15 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除改指定Id的节点
 	 * 
-	 * @param nodeId
-	 * @return
+	 * @param nodeId 节点Id
+	 * @return 操作是否成功
 	 */
 	public Boolean deleteNode(Long nodeId) {
 		Response resp = this.delete(Lang.list("node", String.valueOf(nodeId)));
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -211,43 +222,48 @@ public class Neo4jClient extends RestfulClient {
 	 * @param endNodeId 终止节点Id
 	 * @param relType 关系类型
 	 * @param para 属性Map
-	 * @return
+	 * @return 创建的关系Id
 	 */
 	public Long createRelationship(Long startNodeId, Long endNodeId, String relType, Map<String, Object> para) {
-		Map paraMap = new HashMap();
+		Map<String, Object> paraMap = new HashMap<String, Object>();
 		paraMap.put("to", this.getUrl() + "/node/" + endNodeId);
 		paraMap.put("type", relType);
 		paraMap.put("data", para);
 		Response resp = this.post(Lang.list("node", String.valueOf(startNodeId), "relationships"),
-				JSON.toJSONString(paraMap));
+				paraMap);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			Map respMap = JSON.parseObject(respJson, Map.class);
-			Object selfObj = respMap.get("self");
-			String selfStr = selfObj.toString();
-			long selfRelationshipId = Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
-			return selfRelationshipId;
+			if (!Strings.isEmpty(respJson)) {
+				Map respMap = JSON.parseObject(respJson, Map.class);
+				Object selfObj = respMap.get("self");
+				String selfStr = selfObj.toString();
+				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
+			} else {
+				return null;
+			}
 		} else {
-			return -1L;
+			logger.error(JSON.toJSONString(resp));
+			return null;
 		}
 	}
 
 	/**
 	 * 获取指定Id的关系的属性
 	 * 
-	 * @param nodeId
+	 * @param nodeId 节点Id
 	 * @return 属性Map
 	 */
 	public Map getRelationshipProperties(Long nodeId) {
 		Response resp = this.get(Lang.list("relationship", String.valueOf(nodeId), "properties"));
 		if (resp.getStatus() == 200) {
-			String jsonResp = resp.readEntity(String.class);
-			if (!Strings.isEmpty(jsonResp)) {
-				return JSON.parseObject(jsonResp, Map.class);
+			String respJson = resp.readEntity(String.class);
+			if (!Strings.isEmpty(respJson)) {
+				return JSON.parseObject(respJson, Map.class);
 			} else {
 				return null;
 			}
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return null;
 		}
 	}
@@ -255,10 +271,10 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 设置指定Id的关系的指定属性的值
 	 * 
-	 * @param relationshipId
-	 * @param propertyName
-	 * @param propertyValue
-	 * @return
+	 * @param relationshipId 关系Id
+	 * @param propertyName 属性名
+	 * @param propertyValue 属性值
+	 * @return 操作是否成功
 	 */
 	public Boolean updateRelationshipProperty(Long relationshipId, String propertyName, String propertyValue) {
 		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties", propertyName),
@@ -266,6 +282,7 @@ public class Neo4jClient extends RestfulClient {
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -273,9 +290,9 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除指定Id的关系原有属性，并设置新的指定属性
 	 * 
-	 * @param relationshipId
+	 * @param relationshipId 关系Id
 	 * @param para 属性Map
-	 * @return
+	 * @return 操作是否成功
 	 */
 	public Boolean updateRelationshipProperties(Long relationshipId, Map<String, Object> para) {
 		Response resp = this.put(Lang.list("relationship", String.valueOf(relationshipId), "properties"),
@@ -283,6 +300,7 @@ public class Neo4jClient extends RestfulClient {
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -290,14 +308,15 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 删除指定Id的关系
 	 * 
-	 * @param relationshipId
-	 * @return
+	 * @param relationshipId 关系Id
+	 * @return 操作是否成功
 	 */
 	public Boolean deleteRelationship(Long relationshipId) {
 		Response resp = this.delete(Lang.list("relationship", String.valueOf(relationshipId)));
 		if (resp.getStatus() == 204) {
 			return true;
 		} else {
+			logger.error(JSON.toJSONString(resp));
 			return false;
 		}
 	}
@@ -305,13 +324,15 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 创建节点并指定标签
 	 * 
-	 * @param labels
-	 * @param para
-	 * @return
+	 * @param labels 标签叔祖
+	 * @param para 属性Map
+	 * @return 创建的节点Id
 	 */
 	public Long createNode(String[] labels, Map<String, Object> para) {
 		long nodeId = this.createNode(para);
-		addNodeLabel(nodeId, labels);
+		if(nodeId>0){
+			addNodeLabel(nodeId, labels);
+		}
 		return nodeId;
 	}
 }
