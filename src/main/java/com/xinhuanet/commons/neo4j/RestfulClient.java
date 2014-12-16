@@ -34,7 +34,7 @@ public class RestfulClient {
 		this.url = url;
 	}
 
-	public void httpBasicAuth(String userName, String password) {
+	private void httpBasicAuth(String userName, String password) {
 		HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(userName, password);
 		if (client == null) {
 			ClientConfig clientConfig = new ClientConfig();
