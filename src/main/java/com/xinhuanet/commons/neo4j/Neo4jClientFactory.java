@@ -4,8 +4,12 @@ import com.xinhuanet.commons.neo4j.lang.Strings;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Neo4jClientFactory extends BasePooledObjectFactory<Neo4jClient> {
+
+	private static Logger logger = LoggerFactory.getLogger(Neo4jClientFactory.class);
 
 	private String url;
 	private String httpAuthUserName;
@@ -31,7 +35,7 @@ public class Neo4jClientFactory extends BasePooledObjectFactory<Neo4jClient> {
 		} else if (!Strings.isEmpty(url)) {
 			return new Neo4jClient(url);
 		} else {
-			// TODO
+			logger.error("url is empty!");
 			throw new Exception();
 		}
 	}
