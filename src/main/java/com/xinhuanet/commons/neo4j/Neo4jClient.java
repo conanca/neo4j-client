@@ -1,6 +1,7 @@
 package com.xinhuanet.commons.neo4j;
 
 import com.alibaba.fastjson.JSON;
+import com.xinhuanet.commons.neo4j.lang.JsonUtils;
 import com.xinhuanet.commons.neo4j.lang.Lang;
 import com.xinhuanet.commons.neo4j.lang.Strings;
 import org.slf4j.Logger;
@@ -35,12 +36,11 @@ public class Neo4jClient extends RestfulClient {
 		restParaMap.put("params", para);
 		Response resp = this.post(Lang.list("cypher"), restParaMap);
 		String respJson = resp.readEntity(String.class);
-		if (!Strings.isEmpty(respJson)) {
-			Map respMap = JSON.parseObject(respJson, Map.class);
-			Object dataObj = respMap.get("data");
-			String dataStr = dataObj.toString();
+		String dataStr = JsonUtils.getVale(respJson,String.class,"data");
+		if (!Strings.isEmpty(dataStr)) {
 			return  JSON.parseArray(dataStr, String[].class);
 		} else {
+			logger.error("Invalid response : "+respJson);
 			return null;
 		}
 	}
@@ -55,12 +55,11 @@ public class Neo4jClient extends RestfulClient {
 		Response resp = this.post(Lang.list("node"), para);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			if (!Strings.isEmpty(respJson)) {
-				Map respMap = JSON.parseObject(respJson, Map.class);
-				Object selfObj = respMap.get("self");
-				String selfStr = selfObj.toString();
+			String selfStr = JsonUtils.getVale(respJson,String.class,"self");
+			if (!Strings.isEmpty(selfStr)&&selfStr.contains("/")) {
 				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
-			} else {
+			}else{
+				logger.error("Invalid response : "+respJson);
 				return null;
 			}
 		} else {
@@ -76,14 +75,13 @@ public class Neo4jClient extends RestfulClient {
 	 * @return 属性Map
 	 */
 	public Map getNodeProperties(Long nodeId) {
-		Response resp = this.get(Lang.list("node", String.valueOf(nodeId)));
+		Response resp = this.get(Lang.list("node", String.valueOf(nodeId),"properties"));
 		if (resp.getStatus() == 200) {
 			String respJson = resp.readEntity(String.class);
 			if (!Strings.isEmpty(respJson)) {
-				Map m = JSON.parseObject(respJson, Map.class);
-				Object dataObj = m.get("data");
-				return JSON.parseObject(dataObj.toString(), Map.class);
+				return JSON.parseObject(respJson, Map.class);
 			} else {
+				logger.error("Invalid response : "+respJson);
 				return null;
 			}
 		} else {
@@ -105,6 +103,7 @@ public class Neo4jClient extends RestfulClient {
 			if (!Strings.isEmpty(respJson)) {
 				return JSON.parseObject(respJson, String[].class);
 			} else {
+				logger.error("Invalid response : "+respJson);
 				return null;
 			}
 		} else {
@@ -233,12 +232,11 @@ public class Neo4jClient extends RestfulClient {
 				paraMap);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			if (!Strings.isEmpty(respJson)) {
-				Map respMap = JSON.parseObject(respJson, Map.class);
-				Object selfObj = respMap.get("self");
-				String selfStr = selfObj.toString();
+			String selfStr = JsonUtils.getVale(respJson,String.class,"self");
+			if (!Strings.isEmpty(selfStr)&&selfStr.contains("/")) {
 				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
-			} else {
+			}else{
+				logger.error("Invalid response : "+respJson);
 				return null;
 			}
 		} else {
@@ -260,6 +258,7 @@ public class Neo4jClient extends RestfulClient {
 			if (!Strings.isEmpty(respJson)) {
 				return JSON.parseObject(respJson, Map.class);
 			} else {
+				logger.error("Invalid response : "+respJson);
 				return null;
 			}
 		} else {
@@ -324,7 +323,7 @@ public class Neo4jClient extends RestfulClient {
 	/**
 	 * 创建节点并指定标签
 	 * 
-	 * @param labels 标签叔祖
+	 * @param labels 标签数组
 	 * @param para 属性Map
 	 * @return 创建的节点Id
 	 */
