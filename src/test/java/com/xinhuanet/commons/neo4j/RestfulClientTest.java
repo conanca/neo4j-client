@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class RestfulClientTest {
 	private static Logger logger = LoggerFactory.getLogger(RestfulClientTest.class);
@@ -25,21 +24,12 @@ public class RestfulClientTest {
 		restfulClient = new RestfulClient("http://192.168.86.222:7474/db/data", "neo4j", "xinhua");
 	}
 
-	@Test
-	public void testPostListOfStringString() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testPostListOfStringMapOfStringString() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testGet() {
 		List<String> resources = new ArrayList<String>();
 		resources.add("node");
-		resources.add("1025");
+		resources.add("1001");
 		Response response = restfulClient.get(resources);
 		logger.debug(JSON.toJSONString(response));
 		logger.debug("Status:" + response.getStatus());
@@ -48,23 +38,10 @@ public class RestfulClientTest {
 	}
 
 	@Test
-	public void testPostMap() throws Exception {
-		List<String> resources = new ArrayList<String>();
-		resources.add("node");
-		Map<String, Object> form = new HashMap<String, Object>();
-		form.put("testId", "222");
-		form.put("createdAt", 1400);
-		Response response = restfulClient.post(resources, form);
-		logger.debug("Status:" + response.getStatus());
-		logger.debug("Content:" + response.readEntity(String.class));
-		assertEquals(201,response.getStatus());
-	}
-
-	@Test
 	public void testPostString() throws Exception {
 		List<String> resources = new ArrayList<String>();
 		resources.add("node");
-		resources.add("1025");
+		resources.add("1001");
 		resources.add("labels");
 		String from = "TestLabels";
 		Response response = restfulClient.post(resources, from);
@@ -76,20 +53,14 @@ public class RestfulClientTest {
 
 	@Test
 	public void testDelete() {
-		List<String> resources = new ArrayList<String>();
-		resources.add("node");
-		resources.add("9054150");
-		Response response = restfulClient.delete(resources);
-		logger.debug(JSON.toJSONString(response));
-		logger.debug("Status:" + response.getStatus());
-		logger.debug("Content:" + response.readEntity(String.class));
+
 	}
 
 	@Test
 	public void testPut() {
 		List<String> resources = new ArrayList<String>();
 		resources.add("node");
-		resources.add("9055500");
+		resources.add("1001");
 		resources.add("properties");
 		Map<String, Object> form = new HashMap<String, Object>();
 		form.put("createdAt", 1411);
@@ -99,9 +70,5 @@ public class RestfulClientTest {
 		logger.debug("Content:" + response.readEntity(String.class));
 	}
 
-	@Test
-	public void testPutListOfStringMapOfStringString() {
-		fail("Not yet implemented");
-	}
 
 }
