@@ -53,7 +53,27 @@ public class RestfulClientTest {
 
 	@Test
 	public void testDelete() {
+		List<String> resources = new ArrayList<String>();
+		resources.add("node");
+		resources.add("1001");
+		resources.add("labels");
+		String from = "NewTestLabels";
+		Response response = restfulClient.post(resources, from);
+		logger.debug("Status:" + response.getStatus());
+		logger.debug("data:" + response);
+		logger.debug("Content:" + response.readEntity(String.class));
+		assertEquals(204,response.getStatus());
 
+		resources = new ArrayList<String>();
+		resources.add("node");
+		resources.add("1001");
+		resources.add("labels");
+		resources.add("NewTestLabels");
+		response = restfulClient.delete(resources);
+		logger.debug("Status:" + response.getStatus());
+		logger.debug("data:" + response);
+		logger.debug("Content:" + response.readEntity(String.class));
+		assertEquals(204,response.getStatus());
 	}
 
 	@Test
