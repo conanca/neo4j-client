@@ -1,8 +1,5 @@
 package com.xinhuanet.commons.neo4j.lang;
 
-/**
- * Created by conanca on 14-12-12.
- */
 public class Strings {
 
     /**

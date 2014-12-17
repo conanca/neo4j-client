@@ -36,7 +36,7 @@ public class Neo4jClient extends RestfulClient {
 		restParaMap.put("params", para);
 		Response resp = this.post(Lang.list("cypher"), restParaMap);
 		String respJson = resp.readEntity(String.class);
-		String dataStr = JsonUtils.getVale(respJson,String.class,"data");
+		String dataStr = JsonUtils.getVale(respJson,"data");
 		if (!Strings.isEmpty(dataStr)) {
 			return  JSON.parseArray(dataStr, String[].class);
 		} else {
@@ -55,7 +55,7 @@ public class Neo4jClient extends RestfulClient {
 		Response resp = this.post(Lang.list("node"), para);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			String selfStr = JsonUtils.getVale(respJson,String.class,"self");
+			String selfStr = JsonUtils.getVale(respJson,"self");
 			if (!Strings.isEmpty(selfStr)&&selfStr.contains("/")) {
 				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
 			}else{
@@ -232,7 +232,7 @@ public class Neo4jClient extends RestfulClient {
 				paraMap);
 		if (resp.getStatus() == 201) {
 			String respJson = resp.readEntity(String.class);
-			String selfStr = JsonUtils.getVale(respJson,String.class,"self");
+			String selfStr = JsonUtils.getVale(respJson,"self");
 			if (!Strings.isEmpty(selfStr)&&selfStr.contains("/")) {
 				return Long.parseLong(selfStr.substring(selfStr.lastIndexOf("/") + 1));
 			}else{
