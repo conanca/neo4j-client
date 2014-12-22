@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class JsonUtils {
 
-    public static String getVale(String json,String name){
+    public static String getVale(String json, String name) {
         if (!Strings.isEmpty(json)) {
             Map map = JSON.parseObject(json, Map.class);
-            if(map!=null){
-                Object valObj= map.get(name);
-                if(valObj!=null){
+            if (map != null) {
+                Object valObj = map.get(name);
+                if (valObj != null) {
                     return valObj.toString();
                 }
             }
