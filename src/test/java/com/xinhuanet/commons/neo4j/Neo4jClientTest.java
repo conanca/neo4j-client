@@ -198,4 +198,12 @@ public class Neo4jClientTest {
         logger.debug("" + a);
         assertTrue(a);
     }
+
+    @Test
+    public void testUpdateRelationshipPropertyObjVal() throws Exception {
+        Long id = createTestRelationship();
+        boolean a = neo4jClient.updateRelationshipProperty(id, "testage", 29);
+        logger.debug("" + a);
+        assertTrue(a);
+    }
 }
