@@ -10,7 +10,10 @@
 		<constructor-arg index="2" value="xinhua" />
 	</bean>
 	
-		<bean id="neo4jClientPool" class="com.xinhuanet.commons.neo4j.Neo4jClientPool">
+	<bean id="neo4jClientPool" class="com.xinhuanet.commons.neo4j.Neo4jClientPool">
 		<constructor-arg index="0" ref="neo4jClientFactory" />
+	</bean>
+	<bean id="neo4jTemplate" class="com.xinhuanet.commons.neo4j.Neo4jTemplate">
+		<constructor-arg index="0" ref="neo4jClientPool" />
 	</bean>
 </beans>
