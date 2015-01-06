@@ -1,4 +1,4 @@
-package com.xinhuanet.relationship.common.constant;
+package com.xinhuanet.commons.neo4j.constant;
 
 /**
  * 关系名称

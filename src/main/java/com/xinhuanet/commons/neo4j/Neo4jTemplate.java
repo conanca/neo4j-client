@@ -2,11 +2,13 @@ package com.xinhuanet.commons.neo4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.xinhuanet.commons.neo4j.annotation.GraphId;
+import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
 import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
 
 public class Neo4jTemplate {
@@ -20,12 +22,12 @@ public class Neo4jTemplate {
 	/**
 	 * 创建节点
 	 * 
-	 * @param mapped entity class or Node.class
-	 * @param the properties that should be initially set on the node
+	 * @param target
+	 * @param properties
 	 * @return
 	 * @throws Exception
 	 */
-	<T> T createNodeAs(Class<T> target, Map<String, Object> properties) throws Exception {
+	public <T> T createNodeAs(Class<T> target, Map<String, Object> properties) throws Exception {
 		T t = target.newInstance();
 
 		Map<String, Object> para = new HashMap<String, Object>();
@@ -42,8 +44,21 @@ public class Neo4jTemplate {
 			}
 		}
 
+		// 标签
+		List<String> labels = new ArrayList<String>();
+		Annotation[] as = t.getClass().getAnnotations();
+		for (Annotation a : as) {
+			if (a.annotationType() == NodeEntity.class) {
+				NodeEntity re = (NodeEntity) a;
+				labels.add(re.label());
+			}
+		}
+
 		Neo4jClient neo4jClient = neo4jClientPool.borrowObject();
 		Long nodeId = neo4jClient.createNode(para);
+		if (labels.size() > 0) {
+			neo4jClient.addNodeLabel(nodeId, labels.toArray(new String[labels.size()]));
+		}
 		neo4jClientPool.returnObject(neo4jClient);
 
 		for (Field d : field) {
@@ -56,17 +71,15 @@ public class Neo4jTemplate {
 		return t;
 	}
 
-	<T> T updateNode(T entity) throws Exception {
+	public <T> T updateNode(T entity) throws Exception {
 		Map<String, Object> para = new HashMap<String, Object>();
 		Long nodeId = null;
 		Field[] field = entity.getClass().getDeclaredFields();
-		Method metd = null;
 
 		for (Field f : field) {
 			f.setAccessible(true);
 			String fieldName = f.getName();
-			metd = entity.getClass().getMethod("get" + initName(fieldName));
-			Object value = metd.invoke(entity);
+			Object value = f.get(entity);
 			if (value != null) {
 				if (f.isAnnotationPresent(GraphId.class)) {
 					nodeId = (Long) value;
@@ -92,7 +105,7 @@ public class Neo4jTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	<T> T getNode(Class<T> target, long nodeId) throws Exception {
+	public <T> T getNode(Class<T> target, long nodeId) throws Exception {
 		if (nodeId < 0) {
 			throw new Exception("id is negative");
 		}
@@ -124,7 +137,7 @@ public class Neo4jTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	Boolean deleteNode(long nodeId) throws Exception {
+	public Boolean deleteNode(long nodeId) throws Exception {
 		Boolean result = false;
 		if (nodeId < 0) {
 			throw new Exception("id is negative");
@@ -147,7 +160,7 @@ public class Neo4jTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	<T> T createRelationshipBetween(Class<T> target, Long startNodeId, Long endNodeId, Map<String, Object> para)
+	public <T> T createRelationshipBetween(Class<T> target, Long startNodeId, Long endNodeId, Map<String, Object> para)
 			throws Exception {
 		T t = target.newInstance();
 
@@ -191,17 +204,15 @@ public class Neo4jTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	<T> T updateRelationshipBetween(T entity) throws Exception {
+	public <T> T updateRelationshipBetween(T entity) throws Exception {
 		Map<String, Object> para = new HashMap<String, Object>();
 		Long nodeId = null;
 		Field[] field = entity.getClass().getDeclaredFields();
-		Method metd = null;
 
 		for (Field f : field) {
 			f.setAccessible(true);
 			String fieldName = f.getName();
-			metd = entity.getClass().getMethod("get" + initName(fieldName));
-			Object value = metd.invoke(entity);
+			Object value = f.get(entity);
 			if (value != null) {
 				if (f.isAnnotationPresent(GraphId.class)) {
 					nodeId = (Long) value;
@@ -225,20 +236,10 @@ public class Neo4jTemplate {
 	 * @param relationshipId
 	 * @throws Exception
 	 */
-	void deleteRelationshipBetween(Long relationshipId) throws Exception {
+	public void deleteRelationshipBetween(Long relationshipId) throws Exception {
 		Neo4jClient neo4jClient = neo4jClientPool.borrowObject();
 		neo4jClient.deleteRelationship(relationshipId);
 		neo4jClientPool.returnObject(neo4jClient);
-	}
-
-	public String initName(String src) {
-		if (src != null) {
-			StringBuffer sb = new StringBuffer(src);
-			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-			return sb.toString();
-		} else {
-			return null;
-		}
 	}
 
 }

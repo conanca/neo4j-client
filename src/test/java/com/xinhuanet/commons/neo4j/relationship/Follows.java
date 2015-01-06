@@ -1,7 +1,7 @@
 package com.xinhuanet.commons.neo4j.relationship;
 
 import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
-import com.xinhuanet.relationship.common.constant.RelTypeName;
+import com.xinhuanet.commons.neo4j.constant.RelTypeName;
 
 @RelationshipEntity(type = RelTypeName.FOLLOWS)
 public class Follows extends BaseRelationship {

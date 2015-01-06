@@ -2,8 +2,9 @@ package com.xinhuanet.commons.neo4j.node;
 
 import com.xinhuanet.commons.neo4j.annotation.GraphId;
 import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
+import com.xinhuanet.commons.neo4j.constant.LabelTypeName;
 
-@NodeEntity
+@NodeEntity(label = LabelTypeName.LABLE)
 public class BaseNode {
 	@GraphId
 	private Long nodeId;
