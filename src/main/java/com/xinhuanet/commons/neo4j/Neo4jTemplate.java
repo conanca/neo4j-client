@@ -1,15 +1,15 @@
 package com.xinhuanet.commons.neo4j;
 
+import com.xinhuanet.commons.neo4j.annotation.GraphId;
+import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
+import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.xinhuanet.commons.neo4j.annotation.GraphId;
-import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
-import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
 
 public class Neo4jTemplate {
 
@@ -150,6 +150,11 @@ public class Neo4jTemplate {
 		return result;
 	}
 
+	// TODO
+	public Boolean deleteNode(Object node)throws Exception{
+		return false;
+	}
+
 	/**
 	 * 创建关系
 	 * 
@@ -197,6 +202,11 @@ public class Neo4jTemplate {
 		return t;
 	}
 
+	// TODO
+	public <T> T createRelationshipBetween(Class<T> target, Object startNode, Object endNode, Map<String, Object> para)throws Exception{
+		return null;
+	}
+
 	/**
 	 * 更新关系
 	 * 
@@ -240,6 +250,11 @@ public class Neo4jTemplate {
 		Neo4jClient neo4jClient = neo4jClientPool.borrowObject();
 		neo4jClient.deleteRelationship(relationshipId);
 		neo4jClientPool.returnObject(neo4jClient);
+	}
+
+	// TODO
+	public Boolean  deleteRelationship(Object relationship)throws Exception{
+		return false;
 	}
 
 }
