@@ -84,7 +84,7 @@ public class Neo4jTemplateTest {
 	}
 
 	@Test
-	public void testUpdateRelationshipBetween() throws Exception {
+	public void testUpdateRelationship() throws Exception {
 		BaseNode b1 = TestUtils.initNode(neo4jTemplate);
 		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
 
@@ -101,14 +101,14 @@ public class Neo4jTemplateTest {
 		Thread.sleep(5000);
 
 		f.setUpdatedAt(System.currentTimeMillis());
-		BaseRelationship f2 = neo4jTemplate.updateRelationshipBetween(f);
+		BaseRelationship f2 = neo4jTemplate.updateRelationship(f);
 		logger.debug(JSON.toJSONString(f));
 		logger.debug(JSON.toJSONString(f2));
 
 	}
 
 	@Test
-	public void testDeleteRelationshipBetween() throws Exception {
+	public void testDeleteRelationship() throws Exception {
 		BaseNode b1 = TestUtils.initNode(neo4jTemplate);
 		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
 
@@ -122,6 +122,6 @@ public class Neo4jTemplateTest {
 		Follows f = neo4jTemplate.createRelationshipBetween(Follows.class, b1.getNodeId(), b2.getNodeId(), properties);
 		logger.debug(JSON.toJSONString(f));
 
-		neo4jTemplate.deleteRelationshipBetween(f.getRelId());
+		neo4jTemplate.deleteRelationship(f.getRelId());
 	}
 }

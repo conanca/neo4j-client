@@ -204,7 +204,7 @@ public class Neo4jTemplate {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> T updateRelationshipBetween(T entity) throws Exception {
+	public <T> T updateRelationship(T entity) throws Exception {
 		Map<String, Object> para = new HashMap<String, Object>();
 		Long nodeId = null;
 		Field[] field = entity.getClass().getDeclaredFields();
@@ -236,7 +236,7 @@ public class Neo4jTemplate {
 	 * @param relationshipId
 	 * @throws Exception
 	 */
-	public void deleteRelationshipBetween(Long relationshipId) throws Exception {
+	public void deleteRelationship(Long relationshipId) throws Exception {
 		Neo4jClient neo4jClient = neo4jClientPool.borrowObject();
 		neo4jClient.deleteRelationship(relationshipId);
 		neo4jClientPool.returnObject(neo4jClient);
