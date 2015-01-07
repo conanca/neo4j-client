@@ -1,5 +1,7 @@
 package com.xinhuanet.commons.neo4j;
 
+import static org.junit.Assert.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +14,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.xinhuanet.commons.neo4j.node.BaseNode;
+import com.xinhuanet.commons.neo4j.node.GroupNode;
 import com.xinhuanet.commons.neo4j.relationship.BaseRelationship;
-import com.xinhuanet.commons.neo4j.relationship.Follows;
 
 public class Neo4jTemplateTest {
 	private static Logger logger = LoggerFactory.getLogger(Neo4jTemplateTest.class);
@@ -26,6 +28,14 @@ public class Neo4jTemplateTest {
 		neo4jTemplate = appContext.getBean(Neo4jTemplate.class);
 	}
 
+	public BaseNode createTestNode() throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("createdAt", System.currentTimeMillis());
+		properties.put("updatedAt", System.currentTimeMillis());
+		BaseNode bn = neo4jTemplate.createNodeAs(BaseNode.class, properties);
+		return bn;
+	}
+
 	@Test
 	public void testCreateNodeAs() throws Exception {
 		Map<String, Object> properties = new HashMap<String, Object>();
@@ -34,6 +44,15 @@ public class Neo4jTemplateTest {
 
 		BaseNode bn = neo4jTemplate.createNodeAs(BaseNode.class, properties);
 		logger.debug(JSON.toJSONString(bn));
+	}
+
+	@Test
+	public void testCreateNodeAsNoLabels() throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("groupId", 123);
+
+		GroupNode gn = neo4jTemplate.createNodeAs(GroupNode.class, properties);
+		logger.debug(JSON.toJSONString(gn));
 	}
 
 	@Test
@@ -51,18 +70,37 @@ public class Neo4jTemplateTest {
 
 		logger.debug(JSON.toJSONString(bn));
 		logger.debug(JSON.toJSONString(bn2));
+		// assertEquals();
 	}
 
 	@Test
 	public void testGetNode() throws Exception {
-		BaseNode bn = neo4jTemplate.getNode(BaseNode.class, 10738423L);
-		logger.debug(JSON.toJSONString(bn));
+		BaseNode bn = createTestNode();
+		BaseNode bn2 = neo4jTemplate.getNode(BaseNode.class, bn.getNodeId());
+
+		assertTrue(bn.getNodeId().toString().equals(bn2.getNodeId().toString()));
 	}
 
 	@Test
 	public void testDeleteNode() throws Exception {
-		boolean bn = neo4jTemplate.deleteNode(10738423L);
-		logger.debug(JSON.toJSONString(bn));
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("createdAt", System.currentTimeMillis());
+		properties.put("updatedAt", System.currentTimeMillis());
+		BaseNode bn = neo4jTemplate.createNodeAs(BaseNode.class, properties);
+
+		boolean flag = neo4jTemplate.deleteNode(bn.getNodeId());
+		assertTrue(flag);
+	}
+
+	@Test
+	public void testDeleteNodeEntity() throws Exception {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("createdAt", System.currentTimeMillis());
+		properties.put("updatedAt", System.currentTimeMillis());
+		BaseNode bn = neo4jTemplate.createNodeAs(BaseNode.class, properties);
+
+		boolean flag = neo4jTemplate.deleteNode(bn);
+		assertTrue(flag);
 	}
 
 	@Test
@@ -71,8 +109,6 @@ public class Neo4jTemplateTest {
 		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("startNode", b1);
-		properties.put("endNode", b2);
 		properties.put("createdAt", System.currentTimeMillis());
 		properties.put("updatedAt", System.currentTimeMillis());
 		properties.put("remark", "123456");
@@ -81,6 +117,23 @@ public class Neo4jTemplateTest {
 				b2.getNodeId(), properties);
 
 		logger.debug(JSON.toJSONString(f));
+		assertTrue(f.getRelId() > 0);
+	}
+
+	@Test
+	public void testCreateRelationshipsBetweenNode() throws Exception {
+		BaseNode b1 = TestUtils.initNode(neo4jTemplate);
+		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("createdAt", System.currentTimeMillis());
+		properties.put("updatedAt", System.currentTimeMillis());
+		properties.put("remark", "123456");
+
+		BaseRelationship f = neo4jTemplate.createRelationshipBetween(BaseRelationship.class, b1, b2, properties);
+
+		logger.debug(JSON.toJSONString(f));
+		assertTrue(f.getRelId() > 0);
 	}
 
 	@Test
@@ -100,11 +153,10 @@ public class Neo4jTemplateTest {
 
 		Thread.sleep(5000);
 
-		f.setUpdatedAt(System.currentTimeMillis());
+		Long timeNow = System.currentTimeMillis();
+		f.setUpdatedAt(timeNow);
 		BaseRelationship f2 = neo4jTemplate.updateRelationship(f);
-		logger.debug(JSON.toJSONString(f));
-		logger.debug(JSON.toJSONString(f2));
-
+		assertTrue(f2.getUpdatedAt() == timeNow);
 	}
 
 	@Test
@@ -113,15 +165,35 @@ public class Neo4jTemplateTest {
 		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
 
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put("startNode", b1);
-		properties.put("endNode", b2);
 		properties.put("createdAt", System.currentTimeMillis());
 		properties.put("updatedAt", System.currentTimeMillis());
 		properties.put("remark", "123456");
 
-		Follows f = neo4jTemplate.createRelationshipBetween(Follows.class, b1.getNodeId(), b2.getNodeId(), properties);
+		BaseRelationship f = neo4jTemplate.createRelationshipBetween(BaseRelationship.class, b1.getNodeId(),
+				b2.getNodeId(), properties);
 		logger.debug(JSON.toJSONString(f));
 
-		neo4jTemplate.deleteRelationship(f.getRelId());
+		boolean flag = neo4jTemplate.deleteRelationship(f.getRelId());
+		logger.debug(JSON.toJSONString(flag));
+		assertTrue(flag);
+	}
+
+	@Test
+	public void testDeleteRelationshipEntity() throws Exception {
+		BaseNode b1 = TestUtils.initNode(neo4jTemplate);
+		BaseNode b2 = TestUtils.initNode(neo4jTemplate);
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("createdAt", System.currentTimeMillis());
+		properties.put("updatedAt", System.currentTimeMillis());
+		properties.put("remark", "123456");
+
+		BaseRelationship f = neo4jTemplate.createRelationshipBetween(BaseRelationship.class, b1.getNodeId(),
+				b2.getNodeId(), properties);
+		logger.debug(JSON.toJSONString(f));
+
+		boolean flag = neo4jTemplate.deleteRelationship(f);
+		logger.debug(JSON.toJSONString(flag));
+		assertTrue(flag);
 	}
 }

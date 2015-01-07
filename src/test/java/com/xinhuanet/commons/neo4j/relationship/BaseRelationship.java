@@ -3,9 +3,12 @@ package com.xinhuanet.commons.neo4j.relationship;
 import com.xinhuanet.commons.neo4j.annotation.EndNode;
 import com.xinhuanet.commons.neo4j.annotation.Fetch;
 import com.xinhuanet.commons.neo4j.annotation.GraphId;
+import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
 import com.xinhuanet.commons.neo4j.annotation.StartNode;
+import com.xinhuanet.commons.neo4j.constant.RelTypeName;
 import com.xinhuanet.commons.neo4j.node.BaseNode;
 
+@RelationshipEntity(type = RelTypeName.FOLLOWS)
 public class BaseRelationship {
 	@GraphId
 	private Long relId;

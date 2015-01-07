@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface NodeEntity {
 	// 索引查询需要
-	String label() default "";
+	String[] label() default {};
 }
