@@ -1,13 +1,13 @@
 package com.xinhuanet.commons.neo4j;
 
+import com.xinhuanet.commons.neo4j.annotation.GraphId;
+import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
+import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.xinhuanet.commons.neo4j.annotation.GraphId;
-import com.xinhuanet.commons.neo4j.annotation.NodeEntity;
-import com.xinhuanet.commons.neo4j.annotation.RelationshipEntity;
 
 public class Neo4jTemplate {
 
@@ -150,7 +150,7 @@ public class Neo4jTemplate {
 	/**
 	 * 删除节点
 	 * 
-	 * @param 要删除节点的nodeId
+	 * @param nodeId 要删除节点的nodeId
 	 * @return true:删除成功 false:失败
 	 * @throws Exception
 	 */
