@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.xinhuanet.commons</groupId>
-	<artifactId>jersey-neo4j</artifactId>
-	<version>0.5</version>
+	<artifactId>neo4j-client</artifactId>
+	<version>0.6</version>
 	<packaging>jar</packaging>
 
 	<name>jersey-neo4j</name>
