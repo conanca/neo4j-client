@@ -4,16 +4,16 @@
 	xsi:schemaLocation=
 	"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="neo4jClientFactory" class="com.xinhuanet.commons.neo4j.Neo4jClientFactory">
+	<bean id="neo4jClientFactory" class="com.dolplay.commons.neo4j.Neo4jClientFactory">
 		<constructor-arg index="0" value="http://192.168.86.222:7474/db/data" />
 		<constructor-arg index="1" value="neo4j" />
 		<constructor-arg index="2" value="xinhua" />
 	</bean>
 	
-	<bean id="neo4jClientPool" class="com.xinhuanet.commons.neo4j.Neo4jClientPool">
+	<bean id="neo4jClientPool" class="com.dolplay.commons.neo4j.Neo4jClientPool">
 		<constructor-arg index="0" ref="neo4jClientFactory" />
 	</bean>
-	<bean id="neo4jTemplate" class="com.xinhuanet.commons.neo4j.Neo4jTemplate">
+	<bean id="neo4jTemplate" class="com.dolplay.commons.neo4j.Neo4jTemplate">
 		<constructor-arg index="0" ref="neo4jClientPool" />
 	</bean>
 </beans>
